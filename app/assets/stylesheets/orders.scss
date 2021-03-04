@@ -1,0 +1,38 @@
+// Place all the styles related to the Orders controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+text-right {
+  text-align: right;
+}
+
+.formTable {
+  border-collapse: collapse;
+  width: 90%;
+  font-size: 12px;
+  margin: 20px;
+  text-align: left;
+}
+.formTable th {
+  color: black;
+  padding: 10px;
+  border-bottom: 3px solid #174a5c;
+}
+.formTable td {
+  padding: 8px;
+  color: gray;
+  border-bottom: 1px solid gray;
+}
+
+// .postalTable {
+//   border: 1px solid #aaa;
+//   border-collapse: collapse;
+//   writing-mode: vertical-lr; /* 追加 */
+// }
+// .postalTable th,
+// .postalTable td {
+//   border: 1px solid #aaa;
+//   padding: 4px;
+//   writing-mode: horizontal-tb; /* 追加 */
+//   height: 25px; /* 追加 */
+// }
