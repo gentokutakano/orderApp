@@ -1,5 +1,3 @@
-<a href="#" onclick="this.style.backgroundColor='#990000'">Paint it red</a>
-
 <div class='container mb-5 mt-5'>
   <div class=''>
     <form class="h-adr">
@@ -12,19 +10,19 @@
         </div>
       </fieldset>
       <fieldset class="control-group">
-        <label for="pref01" class="control-label">都道府県</label>
+        <label for="pref01" class="control-label mt-3">都道府県</label>
         <div class="controls">
-          <input type="text" class="p-region" style="width:30%" readonly />
+          <input type="text" class="p-region formReadOnly" style="width:30%" readonly />
         </div>
       </fieldset>
       <fieldset class="control-group">
-        <label for="addr01" class="control-label">市町村</label>
+        <label for="addr01" class="control-label mt-3">市町村</label>
         <div class="controls">
-          <input type="text" class="p-locality  p-street-address" style="width:30%" readonly />
+          <input type="text" class="p-locality  p-street-address formReadOnly" style="width:30%" readonly />
         </div>
       </fieldset>
       <fieldset class="control-group">
-        <label for="addr01" class="control-label">以降の住所</label>
+        <label for="addr01" class="control-label mt-3">以降の住所</label>
         <div class="controls">
         <input type="text" class="p-extended-address" style="width:50%" />
         </div>
@@ -43,10 +41,11 @@
                 <th>ItemQty</th>
                 <th>ItemPrice</th>
                 <th>TotalPrice</th>
+                <th>RemoveRow</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr class='tr'>
                 <td>１</td>
                 <td>
                   <select style="width:80%" name="都道府県">
@@ -57,11 +56,12 @@
                     <option value="ibaraki">SKU0004</option>
                   </select>
                 </td>
-                <td><input type="text" /></td>
-                <td><input type="text" /></td>
-                <td>データ</td>
+                <td><input type="number" class="inputNum itemQty" value="0" /></td>
+                <td><input type="number" class="inputNum itemPrice" value="0" /></td>
+                <td><span class="totalPrice"></span></td>
+                <td><button class="removeRow ml-4">-</button></td>
             </tr>
-            <tr>
+            <tr class='tr'>
                 <td>2</td>
                 <td>
                   <select style="width:80%" name="都道府県">
@@ -72,14 +72,14 @@
                     <option value="ibaraki">SKU0004</option>
                   </select>
                 </td>
-                <td><input type="text" /></td>
-                <td><input type="text" /></td>
-                <td>データ</td>
+                <td><input type="number" class="inputNum itemQty" value="0" /></td>
+                <td><input type="number" class="inputNum itemPrice" value="0" /></td>
+                <td><span class="totalPrice"></span></div></td>
+                <td><button class="removeRow ml-4">-</button></td>
             </tr>
         </tbody>
     </table>
-    <p class='test'>行追加</p>
-    <p>行削除</p>
+<button id="addRow">+ 追加</button>
 </div>
 
 <div class="container">
