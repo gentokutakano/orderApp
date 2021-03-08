@@ -48,12 +48,12 @@
             <tr class='tr'>
                 <td>１</td>
                 <td>
-                  <select style="width:80%" name="都道府県">
+                  <select style="width:80%" name="sku_code" id='SkuBox'>
                     <option value="selected">商品を選択してください</option>
-                    <option value="kanagawa">SKU0001</option>
-                    <option value="chiba">SKU0002</option>
-                    <option value="saitama">SKU0003</option>
-                    <option value="ibaraki">SKU0004</option>
+                    <option value="1">SKU0001</option>
+                    <option value="2">SKU0002</option>
+                    <option value="3">SKU0003</option>
+                    <option value="4">SKU0004</option>
                   </select>
                 </td>
                 <td><input type="number" class="inputNum itemQty" value="0" /></td>
@@ -74,7 +74,7 @@
                 </td>
                 <td><input type="number" class="inputNum itemQty" value="0" /></td>
                 <td><input type="number" class="inputNum itemPrice" value="0" /></td>
-                <td><span class="totalPrice"></span></div></td>
+                <td><span class="totalPrice"></span></td>
                 <td><button class="removeRow ml-4">-</button></td>
             </tr>
         </tbody>
@@ -82,14 +82,25 @@
 <button id="addRow">+ 追加</button>
 </div>
 
+<%= form_with souko_zaiko: ＠sku_code do |f| %>
+  <%= f.select :sku_code, SoukoZaiko.all.map{ |zaiko| [zaiko.sku_code, zaiko.id] },
+  {include_blank: '選択ボックス'},
+  class: 'SoukoZaiko' %>
+<% end %>
+
+
+
+
+
+<%# <input type="text" id="total" class="formReadOnly" readonly /> %>
 <div class="container">
     <div class="row mb-5">
         <div class='col-md-8'></div>
-        <div class="col-md-4">Total 0</div>
+        <div class="col-md-4 anderLine mb-3">Total:  <span id="total" class='ml-5'></span></div>
         <div class='col-md-8'></div>
-        <div class="col-md-4">Tax (10%)</div>
+        <div class="col-md-4 anderLine mb-3">Tax (10%):  <span id="tax" class='ml-5'></span></div>
         <div class='col-md-8'></div>
-        <div class="col-md-4">TotalAmount</div>
+        <div class="col-md-4 anderLine mb-3">TotalAmount:  <span id="totalAmount" class='ml-5'></span></div>
     </div>
       <div class="text-right">
         <button class="btn btn-danger">削除</button>

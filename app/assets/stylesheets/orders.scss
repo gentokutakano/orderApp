@@ -10,6 +10,10 @@ form label {
   border-bottom: 3px solid #174a5c;
 }
 
+.anderLine {
+  border-bottom: 1px solid #174a5c;
+}
+
 .formReadOnly {
   border: none;
   cursor: default;
@@ -17,7 +21,7 @@ form label {
 
 .formTable {
   border-collapse: collapse;
-  width: 90%;
+  width: 100%;
   font-size: 12px;
   margin: 20px;
   text-align: left;
