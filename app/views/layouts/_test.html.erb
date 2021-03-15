@@ -1,0 +1,49 @@
+<%= form_with model: @order do |f| %>
+  <table class='formTable' border="0">
+    <thead>
+      <tr>
+        <th>name</th>
+        <th>total_amount</th>
+        <th>tax</th>
+        <th>zipcode</th>
+        <th>state</th>
+        <th>city</th>
+        <th>area</th>
+        <th>address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td><%= f.text_field :name %></td>
+      <td><%= f.text_field :total_amount, class:'amount' %></td>
+      <td><%= f.text_field :tax %></td>
+      <td><%= f.text_field :delivery_zipcode %></td>
+      <td><%= f.text_field :delivery_state %></td>
+      <td><%= f.text_field :delivery_city %></td>
+      <td><%= f.text_field :delivery_area %></td>
+      <td><%= f.text_field :delivery_address %></td>
+      <td><%= f.submit class: 'btn btn-info' %></td>
+    </tbody>
+  </table>
+
+  <%= form_with model: @items do |f| %>
+    <table class='formTable' border="0">
+      <thead>
+        <tr>
+          <th>ItemName</th>
+          <th>ItemQty</th>
+          <th>ItemPrice</th>
+          <th>TotalAmount</th>
+          <th>Order</th>
+        </tr>
+      </thead>
+      <tbody>
+        <td><%= f.text_field :sku_code %></td>
+        <td><%= f.text_field :quantity %></td>
+        <td><%= f.text_field :price %></td>
+        <td><%= f.text_field :total_amount %></td>
+        <td><%= f.submit class: 'btn btn-info' %></td>
+      </tbody>
+    </table>
+  <% end %>
+
+<% end %>

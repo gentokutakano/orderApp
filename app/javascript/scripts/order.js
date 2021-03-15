@@ -1,23 +1,22 @@
 $(document).ready(function () {
   var idx = 2;
+  var remove_button = "<button class='removeRow ml-4'>-</button>";
 
   // テーブル行追加
-  $('#addRow').on("click", function () {
-    var html = "<tr><td>" + (++idx) + "</td>"
-    + "<td>"
-    +  "<select style='width:80%' name='都道府県'>"
-    +    "<option value='selected'>商品を選択してください</option>"
-    +    "<option value=''>SKU0001</option>"
-    +    "<option value=''>SKU0002</option>"
-    +    "<option value=''>SKU0003</option>"
-    +    "<option value=''>SKU0004</option>"
-    +  "</select></td>"
-    + "<td><input type='number' class='inputNum itemQty' value='0' /></td>"
-    + "<td><input type='number' class='inputNum itemPrice' value='0' /></td>"
-    + "<td><span class='totalPrice'></span></td>"
-      + "<td><button class='removeRow ml-4'>-</button></td></tr>";
+  $(document).on('click', '#addRow', function () {
+    var clone_area = content_area_1.cloneNode(true);
+    clone_area.id = "content_area_" + (++idx);
 
-    $('tbody').append(html);
+    clone_element_id = clone_area.querySelector("#column_id_1");
+    clone_element_id.id = "column_id_" + (idx);
+    clone_element_id.textContent = idx;
+
+    clone_element_id = clone_area.querySelector("#remove_id_1");
+    clone_element_id.id = "remove_id_" + (idx);
+
+    $('tbody')[0].append(clone_area);
+
+    $("#remove_id_" + (idx)).append(remove_button);
   });
 
   // テーブル行削除
@@ -55,4 +54,12 @@ $(document).ready(function () {
     }
   });
 
+  //itemQtyとitemPrice自動設定
+  $(document).on("change", ".SkuBox", function () {
+    var maxQty = $("option:selected", this).data("max-qty");
+    var itemPrice = $("option:selected", this).data("item-price");
+    $(this).parents('tr').find(".itemQty").attr("max", maxQty);
+    $(this).parents('tr').find(".itemPrice").attr("value", itemPrice);
   });
+
+});

@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_08_020354) do
+ActiveRecord::Schema.define(version: 2021_03_15_043726) do
+
+  create_table "order_items", force: :cascade do |t|
+    t.string "sku_code"
+    t.integer "quantity"
+    t.integer "price"
+    t.integer "total_amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "order_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string "name"
+    t.integer "total_amount"
+    t.integer "tax"
+    t.string "delivery_zipcode"
+    t.string "delivery_state"
+    t.string "delivery_city"
+    t.string "delivery_area"
+    t.string "delivery_address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "souko_zaikos", force: :cascade do |t|
     t.string "sku_code"
@@ -18,6 +42,8 @@ ActiveRecord::Schema.define(version: 2021_03_08_020354) do
     t.integer "stock"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "price"
   end
 
+  add_foreign_key "order_items", "orders"
 end

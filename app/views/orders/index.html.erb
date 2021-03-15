@@ -1,10 +1,20 @@
+<% flash.each do |key, value| %>
+  <%= content_tag(:p, value, class: "alert alert-#{key}") %>
+  <%# <button type="button" class="close" data-dismiss="alert">&times;</button> %>
+<% end %>
 <div class='container mb-5 mt-5'>
   <div class=''>
     <form class="h-adr">
       <span class="p-country-name" style="display:none;">Japan</span>
       <legend>Order Form</legend>
+            <fieldset class="control-group">
+        <label class="control-label">お名前</label>
+        <div class="controls">
+          <input type="text" class="userName" style="width:10%">
+        </div>
+      </fieldset>
       <fieldset class="control-group">
-        <label for="zip01" class="control-label">郵便番号</label>
+        <label for="zip01" class="control-label mt-3">郵便番号</label>
         <div class="controls">
           <input type="text" class="p-postal-code" size="8" maxlength="8" style="width:10%">
         </div>
@@ -33,78 +43,137 @@
 
 <div class='container'>
   <h3>Item Information</h3>
-  <table class='formTable' border="0">
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>ItemName</th>
-                <th>ItemQty</th>
-                <th>ItemPrice</th>
-                <th>TotalPrice</th>
-                <th>RemoveRow</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class='tr'>
-                <td>１</td>
-                <td>
-                  <select style="width:80%" name="sku_code" id='SkuBox'>
-                    <option value="selected">商品を選択してください</option>
-                    <option value="1">SKU0001</option>
-                    <option value="2">SKU0002</option>
-                    <option value="3">SKU0003</option>
-                    <option value="4">SKU0004</option>
-                  </select>
-                </td>
-                <td><input type="number" class="inputNum itemQty" value="0" /></td>
-                <td><input type="number" class="inputNum itemPrice" value="0" /></td>
-                <td><span class="totalPrice"></span></td>
-                <td><button class="removeRow ml-4">-</button></td>
-            </tr>
-            <tr class='tr'>
-                <td>2</td>
-                <td>
-                  <select style="width:80%" name="都道府県">
-                    <option value="selected">商品を選択してください</option>
-                    <option value="kanagawa">SKU0001</option>
-                    <option value="chiba">SKU0002</option>
-                    <option value="saitama">SKU0003</option>
-                    <option value="ibaraki">SKU0004</option>
-                  </select>
-                </td>
-                <td><input type="number" class="inputNum itemQty" value="0" /></td>
-                <td><input type="number" class="inputNum itemPrice" value="0" /></td>
-                <td><span class="totalPrice"></span></td>
-                <td><button class="removeRow ml-4">-</button></td>
-            </tr>
-        </tbody>
+  <%= form_with zaiko: @zaikos do |f| %>
+    <table class='formTable' border="0">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>ItemName</th>
+          <th>ItemQty</th>
+          <th>ItemPrice</th>
+          <th>TotalPrice</th>
+          <th>RemoveRow</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="content_area_1">
+          <td id="column_id_1">1</td>
+          <td>
+            <%= f.select :sku_code_id, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock }, { "data-item-price" => zaiko.price }]},
+              {include_blank: '商品を選択して下さい'}, class: "SkuBox" %>
+          </td>
+          <td><input type="number" class="inputNum itemQty" value="0" max="10" id="itemQty_1" min="0" style="width:80%" /></td>
+          <td><input type="number" class="inputNum itemPrice formReadOnly" id="itemPrice_1" value="0" readonly /></td>
+          <td><span class="totalPrice"></span></td>
+          <td id="remove_id_1"></td>
+        </tr>
+        <tr id='content_area_2'>
+          <td id="column_id_2">2</td>
+          <td>
+            <%= f.select :sku_code_id_2, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock }, { "data-item-price" => zaiko.price }]},
+              {include_blank: '商品を選択して下さい'}, class: "SkuBox" %>
+          </td>
+          <td><input type="number" class="inputNum itemQty" value="0" max="10" id="itemQty_2" min="0" style="width:80%" /></td>
+          <td><input type="number" class="inputNum itemPrice formReadOnly" id="itemPrice_2" value="0" readonly /></td>
+          <td><span class="totalPrice"></span></td>
+          <td><button class="removeRow ml-4">-</button></td>
+        </tr>
+      </tbody>
     </table>
-<button id="addRow">+ 追加</button>
+  <% end %>
+  <button id="addRow">+ Add</button>
 </div>
 
-<%= form_with souko_zaiko: ＠sku_code do |f| %>
-  <%= f.select :sku_code, SoukoZaiko.all.map{ |zaiko| [zaiko.sku_code, zaiko.id] },
-  {include_blank: '選択ボックス'},
-  class: 'SoukoZaiko' %>
+<h2>アイテム一覧</h2>
+
+<% @zaikos.each do |zaiko| %>
+  <table class='formTable' border="0">
+    <thead>
+      <tr>
+        <th>ItemName</th>
+        <th>ItemQty</th>
+        <th>ItemPrice</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td><%= zaiko.sku_code %></td>
+      <td><%= zaiko.stock %></td>
+      <td><%= zaiko.price %></td>
+    </tbody>
+  </table>
+<% end %>
+
+<%# -------------------------------------------------------------------- %>
+
+<%= form_with model: @order do |f| %>
+  <table class='formTable' border="0">
+    <thead>
+      <tr>
+        <th>name</th>
+        <th>total_amount</th>
+        <th>tax</th>
+        <th>zipcode</th>
+        <th>state</th>
+        <th>city</th>
+        <th>area</th>
+        <th>address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td><%= f.text_field :name %></td>
+      <td><%= f.text_field :total_amount, class:'amount' %></td>
+      <td><%= f.text_field :tax %></td>
+      <td><%= f.text_field :delivery_zipcode %></td>
+      <td><%= f.text_field :delivery_state %></td>
+      <td><%= f.text_field :delivery_city %></td>
+      <td><%= f.text_field :delivery_area %></td>
+      <td><%= f.text_field :delivery_address %></td>
+      <td><%= f.submit class: 'btn btn-info' %></td>
+    </tbody>
+  </table>
+
+  <%= form_with model: @items do |f| %>
+    <table class='formTable' border="0">
+      <thead>
+        <tr>
+          <th>ItemName</th>
+          <th>ItemQty</th>
+          <th>ItemPrice</th>
+          <th>TotalAmount</th>
+          <th>Order</th>
+        </tr>
+      </thead>
+      <tbody>
+        <td><%= f.text_field :sku_code %></td>
+        <td><%= f.text_field :quantity %></td>
+        <td><%= f.text_field :price %></td>
+        <td><%= f.text_field :total_amount %></td>
+        <td><%= f.submit class: 'btn btn-info' %></td>
+      </tbody>
+    </table>
+  <% end %>
+
 <% end %>
 
 
 
 
 
-<%# <input type="text" id="total" class="formReadOnly" readonly /> %>
-<div class="container">
-    <div class="row mb-5">
-        <div class='col-md-8'></div>
-        <div class="col-md-4 anderLine mb-3">Total:  <span id="total" class='ml-5'></span></div>
-        <div class='col-md-8'></div>
-        <div class="col-md-4 anderLine mb-3">Tax (10%):  <span id="tax" class='ml-5'></span></div>
-        <div class='col-md-8'></div>
-        <div class="col-md-4 anderLine mb-3">TotalAmount:  <span id="totalAmount" class='ml-5'></span></div>
-    </div>
-      <div class="text-right">
-        <button class="btn btn-danger">削除</button>
-        <button class="btn btn-info">確定</button>
-      </div>
-</div>
 
+<%# --------------------------------------------------------------- %>
+
+
+<div class="container">
+  <div class="row mb-5">
+    <div class='col-md-8'></div>
+    <div class="col-md-4 anderLine mb-3">Total:  <span id="total" class='ml-5'></span></div>
+    <div class='col-md-8'></div>
+    <div class="col-md-4 anderLine mb-3">Tax (10%):  <span id="tax" class='ml-5'></span></div>
+    <div class='col-md-8'></div>
+    <div class="col-md-4 anderLine mb-3">TotalAmount:  <span id="totalAmount" class='ml-5'></span></div>
+  </div>
+    <div class="text-right">
+      <button class="btn btn-danger">削除</button>
+      <button class="btn btn-info">確定</button>
+    </div>
+</div>
