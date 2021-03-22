@@ -1,3 +1,3 @@
 class SoukoZaiko < ApplicationRecord
-  validates :sku_code, uniqueness: true
+  # validates :sku_code, uniqueness: true
 end

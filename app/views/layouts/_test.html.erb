@@ -14,18 +14,17 @@
     </thead>
     <tbody>
       <td><%= f.text_field :name %></td>
-      <td><%= f.text_field :total_amount, class:'amount' %></td>
+      <td><%= f.text_field :purchase_amount, class:'amount' %></td>
       <td><%= f.text_field :tax %></td>
       <td><%= f.text_field :delivery_zipcode %></td>
       <td><%= f.text_field :delivery_state %></td>
       <td><%= f.text_field :delivery_city %></td>
       <td><%= f.text_field :delivery_area %></td>
       <td><%= f.text_field :delivery_address %></td>
-      <td><%= f.submit class: 'btn btn-info' %></td>
     </tbody>
   </table>
 
-  <%= form_with model: @items do |f| %>
+  <%= f.fields_for :order_items,  @items do |oi| %>
     <table class='formTable' border="0">
       <thead>
         <tr>
@@ -37,13 +36,17 @@
         </tr>
       </thead>
       <tbody>
-        <td><%= f.text_field :sku_code %></td>
-        <td><%= f.text_field :quantity %></td>
-        <td><%= f.text_field :price %></td>
-        <td><%= f.text_field :total_amount %></td>
-        <td><%= f.submit class: 'btn btn-info' %></td>
+          <tr>
+            <td>
+              <%= oi.select :sku_code, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock }, { "data-item-price" => zaiko.price }]}, {include_blank: '商品を選択して下さい'}, class: "SkuBox" %>
+            </td>
+            <td><%= oi.text_field :quantity, class: "inputNum itemQty", type: "number", value: "0",max: "10" ,min: "0",style: "width:80%" %></td>
+            <td><%= oi.text_field :price, class: "inputNum itemPrice formReadOnly", type: "number", value: "0", readonly: true %></td>
+            <td><%= oi.text_field :total_amount, class: "totalPrice formReadOnly", readonly: true %></td>
+            <td id="remove_id_1"></td>
+          </tr>
       </tbody>
     </table>
   <% end %>
-
+  <%= f.submit class: 'btn btn-info' %>
 <% end %>

@@ -1,0 +1,2 @@
+module SoukoZaikosHelper
+end

@@ -1,9 +1,11 @@
 class OrdersController < ApplicationController
+  # before_action :arrey_filter
 
   def index
     @zaikos = SoukoZaiko.where(stock_type: "01")
-    @items  = OrderItem.new
     @order = Order.new
+    # @items  = 2.times { @order.order_items.build }
+    @items  = @order.order_items.build
     # binding.pry
   end
 
@@ -14,30 +16,35 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(order_params)
-    @order_item = @order.order_items.build(order_item_params)
-    @zaikos = SoukoZaiko.where(sku_code: @order_item.sku_code)
 
-    binding.pry
+    @order = Order.new(order_params)
+    # 未入力配列を削除
+    @order.order_items = @order.order_items.reject{|m|
+      m.sku_code.blank? || m.quantity == 0 || m.price == 0 || m.total_amount.blank?}
+    @zaikos = SoukoZaiko.where(id: @order.order_items.map{|m| m.sku_code })
+    # binding.pry
 
     if @order.save
+      @order_quantity = @order.order_items.map{|m| m.quantity }
 
-      if @order_item.save
-        @quantity_item = @order_item.quantity
-        @zaikos[0].stock = @zaikos[0].stock - @quantity_item
+      # 在庫数量 - 購入数量
+      @order_quantity.each_with_index do |buy, i|
+        @zaikos[i].stock = @zaikos[i].stock - buy
+        if @zaikos[i].stock == 0
+          @zaikos[i].stock_type = '02'
+        end
+        @zaikos[i].save
       end
 
-      if @zaikos[0].stock == 0
-        @zaikos[0].stock_type = '02'
-      end
-      @zaikos[0].save
-
-      flash[:success] = "ユーザー登録しました。"
+      flash[:success] = "注文を受け付けました"
       redirect_to root_path
     else
-      flash[:danger] = "ユーザー登録に失敗しました。"
+      flash[:danger] = "注文に失敗しました。"
       redirect_to root_path
     end
+  end
+
+  def update
   end
 
   def stock
@@ -48,12 +55,18 @@ class OrdersController < ApplicationController
   private
     def order_params
       params.require(:order).permit(
-        :id, :name, :total_amount,
+        :id, :name, :purchase_amount,
           :tax, :delivery_zipcode, :delivery_state,
-            :delivery_city, :delivery_area, :delivery_address)
+            :delivery_city, :delivery_area, :delivery_address,
+            order_items_attributes: [:id, :sku_code, :quantity, :price, :total_amount]
+        )
     end
 
     def order_item_params
       params.require(:order_item).permit(:id, :sku_code, :quantity, :price, :total_amount)
+    end
+
+    def souko_zaiko_params
+      params.require(:souko_zaiko).permit(:id, :sku_code, :stock_type, :stock, :price)
     end
 end
