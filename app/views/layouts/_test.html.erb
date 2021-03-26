@@ -45,6 +45,15 @@
             <td><%= oi.text_field :total_amount, class: "totalPrice formReadOnly", readonly: true %></td>
             <td id="remove_id_1"></td>
           </tr>
+          <tr>
+            <td>
+              <%= oi.select :sku_code, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock }, { "data-item-price" => zaiko.price }]}, {include_blank: '商品を選択して下さい'}, class: "SkuBox" %>
+            </td>
+            <td><%= oi.text_field :quantity, class: "inputNum itemQty", type: "number", value: "0",max: "10" ,min: "0",style: "width:80%" %></td>
+            <td><%= oi.text_field :price, class: "inputNum itemPrice formReadOnly", type: "number", value: "0", readonly: true %></td>
+            <td><%= oi.text_field :total_amount, class: "totalPrice formReadOnly", readonly: true %></td>
+            <td id="remove_id_1"></td>
+          </tr>
       </tbody>
     </table>
   <% end %>

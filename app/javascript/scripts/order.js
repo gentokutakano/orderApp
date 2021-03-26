@@ -1,5 +1,6 @@
 $(document).ready(function () {
   var idx = 1;
+  var idy = 0;
   var remove_button = "<button class='removeRow ml-4'>-</button>";
 
   // テーブル行追加
@@ -9,11 +10,21 @@ $(document).ready(function () {
 
     // 各idを挿入
     clone_area.id = "content_area_" + (++idx);
-    clone_element_id = clone_area.querySelector("#column_id_1");
-    clone_element_id.id = "column_id_" + (idx);
-    clone_element_id.textContent = idx;
-    clone_element_id = clone_area.querySelector("#remove_id_1");
-    clone_element_id.id = "remove_id_" + (idx);
+    clone_column_id = clone_area.querySelector("#column_id_1");
+    clone_column_id.id = "column_id_" + (idx);
+
+    clone_sku = clone_area.querySelector("#order_order_items_attributes_0_sku_code");
+    clone_sku.name = "order[order_items_attributes][" + (++idy) + "][sku_code]";
+    clone_quantity = clone_area.querySelector("#order_order_items_attributes_0_quantity");
+    clone_quantity.name = "order[order_items_attributes][" + (idy) + "][quantity]";
+    clone_price = clone_area.querySelector("#order_order_items_attributes_0_price");
+    clone_price.name = "order[order_items_attributes][" + (idy) + "][price]";
+    clone_total_amount = clone_area.querySelector("#order_order_items_attributes_0_total_amount");
+    clone_total_amount.name = "order[order_items_attributes][" + (idy) + "][total_amount]";
+
+    clone_column_id.textContent = idx;
+    clone_column_id = clone_area.querySelector("#remove_id_1");
+    clone_column_id.id = "remove_id_" + (idx);
 
     // コピーカラムを追加
     $('tbody')[0].append(clone_area);
@@ -47,7 +58,7 @@ $(document).ready(function () {
   var AutoPurchaseCalc = $(document).on('change', $('.totalPrice').value, function () {
     var inputs = $('.totalPrice').each(function(index, element){
       return element.value;  // valueを取り出す
-    }).get();  // 標準的な配列に変換
+    });  // 標準的な配列に変換
 
     var sum = 0;
     for (var i = 0; i < inputs.length; i++){
@@ -55,11 +66,11 @@ $(document).ready(function () {
         sum += parseInt(inputs[i].value, 10);
         $("#total").text(sum + '円');
 
-        var totalAmount = Math.round(sum * 110 / 100);
-        $("#totalAmount").text(totalAmount + "円");
+        var purchaseAmount = Math.round(sum * 110 / 100);
+        $("#order_purchase_amount").val(purchaseAmount + "円");
 
-        var tax = totalAmount - sum;
-        $("#tax").text(tax);
+        var tax = purchaseAmount - sum;
+        $("#order_tax").val(tax);
       }
     }
   });
@@ -72,5 +83,17 @@ $(document).ready(function () {
     // $(this).parents('tr').find(".itemPrice").attr("value", itemPrice);
     $(this).parents('tr').find(".itemPrice").val(itemPrice);
   });
+
+
+  //************************************ */
+  //*****     バリデーション    *********** */
+
+  $(".valid_order").validationEngine({
+    promptPosition: "inline"
+  });
+
+  // ******   バリデーション       *********** */
+  //************************************ */
+
 
 });

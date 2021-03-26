@@ -9,20 +9,13 @@ class OrdersController < ApplicationController
     # binding.pry
   end
 
-  def new
-    @zaikos = SoukoZaiko.new
-    @items = OrderItem.new
-    binding.pry
-  end
-
   def create
-
     @order = Order.new(order_params)
     # 未入力配列を削除
     @order.order_items = @order.order_items.reject{|m|
       m.sku_code.blank? || m.quantity == 0 || m.price == 0 || m.total_amount.blank?}
     @zaikos = SoukoZaiko.where(id: @order.order_items.map{|m| m.sku_code })
-    # binding.pry
+    binding.pry
 
     if @order.save
       @order_quantity = @order.order_items.map{|m| m.quantity }
@@ -42,14 +35,6 @@ class OrdersController < ApplicationController
       flash[:danger] = "注文に失敗しました。"
       redirect_to root_path
     end
-  end
-
-  def update
-  end
-
-  def stock
-    @stocks = SoukoZaiko.where(sku_code_id: params[:sku_code_id])
-    binding.pry
   end
 
   private

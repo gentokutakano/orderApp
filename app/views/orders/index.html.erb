@@ -3,98 +3,103 @@
   <%# <button type="button" class="close" data-dismiss="alert">&times;</button> %>
 <% end %>
 
-
 <%= form_with model: @order do |f| %>
-  <div class='container mb-5 mt-5'>
-    <form>
+  <% if @order.errors.any? %>
+  <div class="error_alert">
+    <ul>
+      <h3>エラー件数<%= @order.errors.count %>件</h3>
+      <% @order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+<% end %>
+
+<%= form_with model: @order, class: "valid_order" do |f| %>
+  <div class='container mb-5 mt-5 valid_order'>
+
       <div class="h-adr">
         <span class="p-country-name" style="display:none;">Japan</span>
         <legend>Order Form</legend>
         <fieldset class="control-group">
           <label class="control-label">お名前</label>
           <div class="controls">
-            <%# <input type="text" class="userName" style="width:10%"> %>
-            <%= f.text_field :name, class: "userName", style: "width:10%" %>
+            <%= f.text_field :name, class: "userName validate[required]", style: "width:10%" %>
           </div>
         </fieldset>
         <fieldset class="control-group">
           <label for="zip01" class="control-label mt-3">郵便番号</label>
           <div class="controls">
-            <%# <input type="text" class="p-postal-code" size="8" maxlength="8" style="width:10%"> %>
-            <%= f.text_field :delivery_zipcode, class: "p-postal-code", size: "8", maxlength:"8", style: "width:10%" %>
+            <%= f.text_field :delivery_zipcode, class: "p-postal-code validate[required]", size: "8", maxlength:"8", style: "width:10%" %>
           </div>
         </fieldset>
         <fieldset class="control-group">
           <label for="pref01" class="control-label mt-3">都道府県</label>
           <div class="controls">
-            <%# <input type="text" class="p-region formReadOnly" style="width:30%" readonly /> %>
             <%= f.text_field :delivery_city, class: "p-region formReadOnly", style: "width:30%", readonly: true %>
           </div>
         </fieldset>
         <fieldset class="control-group">
           <label for="addr01" class="control-label mt-3">市町村</label>
           <div class="controls">
-            <%# <input type="text" class="p-locality  p-street-address formReadOnly" style="width:30%" readonly /> %>
             <%= f.text_field :delivery_area, class: "p-locality  p-street-address formReadOnly", style: "width:30%", readonly: true %>
           </div>
         </fieldset>
         <fieldset class="control-group">
           <label for="addr01" class="control-label mt-3">以降の住所</label>
           <div class="controls">
-          <%# <input type="text" class="p-extended-address" style="width:50%" /> %>
-          <%= f.text_field :delivery_address, class: "p-extended-address", style: "width:50%"  %>
+          <%= f.text_field :delivery_address, class: "p-extended-address validate[required]", style: "width:50%"  %>
           </div>
         </fieldset>
       </div>
-    </form>
   </div>
 
 
-  <div class='container'>
-    <h3>Item Information</h3>
-    <%= f.fields_for :order_items, @items do |oi| %>
-      <table class='formTable' border="0">
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>ItemName</th>
-            <th>ItemQty</th>
-            <th>ItemPrice</th>
-            <th>TotalPrice</th>
-            <th>RemoveRow</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr id="content_area_1">
-            <td id="column_id_1">1</td>
-            <td>
-              <%= oi.select :sku_code, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock },
-                { "data-item-price" => zaiko.price }]}, {include_blank: '商品を選択して下さい'}, class: "SkuBox" %>
-            </td>
-            <td><%= oi.text_field :quantity, class: "inputNum itemQty", type: "number", value: "0",max: "10" ,min: "0",style: "width:80%" %></td>
-            <td><%= oi.text_field :price, class: "inputNum itemPrice formReadOnly", type: "number", value: "0", readonly: true %></td>
-            <td><%= oi.text_field :total_amount, class: "totalPrice formReadOnly", readonly: true %></td>
-            <td id="remove_id_1"></td>
-          </tr>
-        </tbody>
-      </table>
-    <% end %>
-    <button id="addRow">+ Add</button>
-    <button id="ReloadRow">+ Add</button>
-  </div>
+    <div class='container'>
+      <h3>Item Information</h3>
+  <%= f.fields_for :order_items, @items do |oi| %>
+        <table class='formTable' border="0">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>ItemName</th>
+              <th>ItemQty</th>
+              <th>ItemPrice</th>
+              <th>TotalPrice</th>
+              <th>RemoveRow</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="content_area_1">
+              <td id="column_id_1">1</td>
+              <td>
+                <%= oi.select :sku_code, @zaikos.map{ |zaiko| [zaiko.sku_code, zaiko.id, { "data-max-qty"=> zaiko.stock },
+                  { "data-item-price" => zaiko.price }]}, {include_blank: '商品を選択して下さい'}, class: "SkuBox validate[required]" %>
+              </td>
+              <td><%= oi.text_field :quantity, class: "inputNum itemQty", type: "number", value: "0",max: "10" ,min: "0",style: "width:80%" %></td>
+              <td><%= oi.text_field :price, class: "inputNum itemPrice formReadOnly", type: "number", value: "0", readonly: true %></td>
+              <td><%= oi.text_field :total_amount, class: "totalPrice formReadOnly", readonly: true %></td>
+              <td id="remove_id_1"></td>
+            </tr>
+          </tbody>
+        </table>
+  <% end %>
+      <button id="addRow" type="button">+ Add</button>
+    </div>
 
   <div class="container">
     <div class="row mb-5">
       <div class='col-md-8'></div>
       <div class="col-md-4 anderLine mb-3">Total:  <span id="total" class='ml-5'></span></div>
       <div class='col-md-8'></div>
-      <div class="col-md-4 anderLine mb-3">Tax (10%):  <span id="tax" class='ml-5'></span></div>
+      <div class="col-md-4 anderLine mb-3">Tax (10%):  <%= f.text_field :tax, class: "ml-5 formReadOnly" %></div>
       <div class='col-md-8'></div>
-      <div class="col-md-4 anderLine mb-3">TotalAmount:  <span id="totalAmount" class='ml-5'></span></div>
+      <div class="col-md-4 anderLine mb-3">TotalAmount:  <%= f.text_field :purchase_amount, class:'amount ml-5 formReadOnly' %></div>
     </div>
       <div class="text-right">
-        <button class="btn btn-danger">削除</button>
-        <button class="btn btn-info">確定</button>
+        <button type="button" class="btn btn-danger">削除</button>
+        <%= f.submit class: 'btn btn-info valid_order', value: "確定" %>
       </div>
   </div>
 

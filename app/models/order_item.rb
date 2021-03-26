@@ -1,4 +1,5 @@
 class OrderItem < ApplicationRecord
-  validates :sku_code, presence: true
   belongs_to :order, optional: true
+  validates :sku_code, presence: true
+  validates :order, presence: true
 end

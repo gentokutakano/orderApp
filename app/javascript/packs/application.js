@@ -15,6 +15,9 @@ ActiveStorage.start()
 
 require("jquery")
 require("../scripts/order")
+require("./jquery.validationEngine")
+require("./jquery.validationEngine-ja")
+require("./modal")
 // require("../scripts/nested_form_fields")
 // import "/Users/thinkbiz/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/nested_form_fields-0.8.4/lib/assets/javascripts/nested_form_fields.js.coffee";
 // require("/Users/thinkbiz/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/nested_form_fields-0.8.4/lib/assets/javascripts/nested_form_fields.js.coffee")
