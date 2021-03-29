@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
     @order.order_items = @order.order_items.reject{|m|
       m.sku_code.blank? || m.quantity == 0 || m.price == 0 || m.total_amount.blank?}
     @zaikos = SoukoZaiko.where(id: @order.order_items.map{|m| m.sku_code })
-    binding.pry
+    # binding.pry
 
     if @order.save
       @order_quantity = @order.order_items.map{|m| m.quantity }
